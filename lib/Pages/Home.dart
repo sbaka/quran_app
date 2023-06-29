@@ -1,11 +1,14 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+// to get location of user
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+// Modal for prayer Times
 import 'package:quran_app/Modals/PrayerTimingsModal.dart';
+// https://pub.dev/packages/hijri to get the hijri date ( cause pi fiha probleme ta3 unicode )
+import 'package:hijri/hijri_calendar.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -13,6 +16,9 @@ class Home extends StatefulWidget {
   @override
   State<Home> createState() => _HomeState();
 }
+
+//Variables :
+late HijriCalendar _today;
 
 Future<PrayerTimingsModal> _getTodayInfo() async {
   String fullAddress = await fetchUserAddress(); // Retrieve the user's address
@@ -121,7 +127,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _getTodayInfo();
+    _today = HijriCalendar.now();
   }
 
   @override
@@ -146,13 +152,13 @@ class _HomeState extends State<Home> {
           width: 327,
           height: 257,
           child: Column(children: [
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: Text("3 Dhu al-Hijjah 1444",
-                      style: TextStyle(
+                  child: Text("${_today.toFormat("dd MMMM yyyy").toString()}'",
+                      style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
                           fontSize: 18)),
@@ -167,7 +173,7 @@ class _HomeState extends State<Home> {
                   builder: (context, snapshot) {
                     return Text(
                       DateFormat('hh:mm').format(DateTime.now()),
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
                           fontSize: 35),
@@ -177,7 +183,7 @@ class _HomeState extends State<Home> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 30, left: 10, right: 10),
+              padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
               child: FutureBuilder<PrayerTimingsModal>(
                 future: _getTodayInfo(),
                 builder: (context, snapshot) {
@@ -195,7 +201,15 @@ class _HomeState extends State<Home> {
                                   'Fajr',
                                   style: TextStyle(
                                     color: Colors.white,
+                                    fontWeight: FontWeight.w600,
                                   ),
+                                ),
+                                SizedBox(height: 5),
+                                Image.asset(
+                                  'assets/Images/fajr.png',
+                                  width: 40,
+                                  height: 40,
+                                  color: Colors.white,
                                 ),
                                 SizedBox(height: 5),
                                 Text(
@@ -210,10 +224,18 @@ class _HomeState extends State<Home> {
                             Column(
                               children: [
                                 Text(
-                                  'Dohr',
+                                  'Dhuhr',
                                   style: TextStyle(
                                     color: Colors.white,
+                                    fontWeight: FontWeight.w600,
                                   ),
+                                ),
+                                SizedBox(height: 5),
+                                Image.asset(
+                                  'assets/Images/dhuhr.png',
+                                  width: 40,
+                                  height: 40,
+                                  color: Colors.white,
                                 ),
                                 SizedBox(height: 5),
                                 Text(
@@ -231,7 +253,15 @@ class _HomeState extends State<Home> {
                                   'Asr',
                                   style: TextStyle(
                                     color: Colors.white,
+                                    fontWeight: FontWeight.w600,
                                   ),
+                                ),
+                                SizedBox(height: 5),
+                                Image.asset(
+                                  'assets/Images/asr.png',
+                                  width: 40,
+                                  height: 40,
+                                  color: Colors.white,
                                 ),
                                 SizedBox(height: 5),
                                 Text(
@@ -249,7 +279,15 @@ class _HomeState extends State<Home> {
                                   'Maghrib',
                                   style: TextStyle(
                                     color: Colors.white,
+                                    fontWeight: FontWeight.w600,
                                   ),
+                                ),
+                                SizedBox(height: 5),
+                                Image.asset(
+                                  'assets/Images/maghreb.png',
+                                  width: 40,
+                                  height: 40,
+                                  color: Colors.white,
                                 ),
                                 SizedBox(height: 5),
                                 Text(
@@ -267,7 +305,15 @@ class _HomeState extends State<Home> {
                                   'Isha',
                                   style: TextStyle(
                                     color: Colors.white,
+                                    fontWeight: FontWeight.w600,
                                   ),
+                                ),
+                                SizedBox(height: 5),
+                                Image.asset(
+                                  'assets/Images/isha.png',
+                                  width: 40,
+                                  height: 40,
+                                  color: Colors.white,
                                 ),
                                 SizedBox(height: 5),
                                 Text(
@@ -283,6 +329,8 @@ class _HomeState extends State<Home> {
                         ),
                       ],
                     );
+
+                    ;
                   } else if (snapshot.hasError) {
                     return Text(
                       'Failed to fetch prayer timings',

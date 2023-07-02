@@ -74,6 +74,7 @@ flutter:
     - assets/Images/maghreb.png
     - assets/Images/isha.png
     - assets/Images/Quran.png
+    - assets/Images/Star.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

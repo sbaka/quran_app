@@ -4,6 +4,6 @@ import 'package:quran_app/Pages/Home.dart';
 void main() => runApp(MaterialApp(
       initialRoute: "/",
       routes: {
-        '/': (context) => Home(),
+        '/': (context) => const Home(),
       },
     ));

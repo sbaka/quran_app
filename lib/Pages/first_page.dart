@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quran_app/Components/sourat_widget.dart';
 
 import '../Components/last_read.dart';
 import '../Components/time_prayer_widget.dart';
@@ -72,6 +73,7 @@ class _FirstPageState extends State<FirstPage> {
           height: 15,
         ),
         const LastRead(),
+        const SouraWidget(),
       ],
     );
   }

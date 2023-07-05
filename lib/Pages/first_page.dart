@@ -68,11 +68,11 @@ class _FirstPageState extends State<FirstPage> {
         const SizedBox(
           height: 20,
         ),
-        const TimePrayerWidget(),
+/*        const TimePrayerWidget(),
         const SizedBox(
           height: 15,
         ),
-        const LastRead(),
+       const LastRead(), */
         const SouraWidget(),
       ],
     );

@@ -18,12 +18,13 @@ class SouratProvider extends ChangeNotifier {
 
   getMyData() async {
     isLoading = true;
-    _sourat = await fetchSurahInfo();
+    final surahs = await fetchSurahInfo(1, 10);
+    _sourat = surahs;
     isLoading = false;
     notifyListeners();
   }
 
-  Future<List<SouratModal>> fetchSurahInfo() async {
+  Future<List<SouratModal>> fetchSurahInfo(int start, int end) async {
     final options = {
       'headers': {
         'X-RapidAPI-Key': '25a0c6ee81msh64c3a6ce890c94dp158a6bjsn3fbb12e5af7d',
@@ -33,7 +34,7 @@ class SouratProvider extends ChangeNotifier {
 
     final List<SouratModal> surahs = [];
 
-    for (int i = 1; i <= 15; i++) {
+    for (int i = start; i <= end; i++) {
       final uri = Uri.https(
         'al-quran1.p.rapidapi.com',
         '/$i',
@@ -63,5 +64,17 @@ class SouratProvider extends ChangeNotifier {
     }
 
     return surahs;
+  }
+
+  loadMoreData() async {
+    if (!isLoading) {
+      isLoading = true;
+      final start = _sourat.length + 1;
+      final end = start + 9;
+      final surahs = await fetchSurahInfo(start, end);
+      _sourat.addAll(surahs);
+      isLoading = false;
+      notifyListeners();
+    }
   }
 }

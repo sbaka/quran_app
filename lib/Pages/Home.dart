@@ -20,8 +20,40 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const Drawer(child: Text("")),
+      appBar: AppBar(
+        title: const Text(
+          'Quran App',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            height: 1.5,
+            color: Color(0xffffffff),
+          ),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        actions: [
+          TextButton(
+            onPressed: () {},
+            child: const SizedBox(
+              width: 24,
+              height: 24,
+              child: Icon(
+                Icons.search,
+                size: 24,
+                color: Color(0xffA19CC5),
+              ),
+            ),
+          ),
+        ],
+      ),
       backgroundColor: const Color(0xff030c23),
       bottomNavigationBar: NavigationBar(
+        height: 80,
+        backgroundColor: const Color(0xFF121931),
         selectedIndex: selectedPage,
         onDestinationSelected: (newDestination) {
           setState(
@@ -30,22 +62,47 @@ class _HomeState extends State<Home> {
             },
           );
         },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home),
-            label: 'Home',
+        indicatorColor: Colors.transparent,
+        destinations: [
+          Center(
+            child: NavigationDestination(
+              icon: Icon(
+                Icons.home,
+                size: 32,
+                color: selectedPage == 0 ? const Color(0xFFA44AFF) : const Color(0xffA19CC5),
+              ),
+              label: '',
+            ),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.light),
-            label: 'Mena',
+          Center(
+            child: NavigationDestination(
+              icon: Icon(
+                Icons.light,
+                color: selectedPage == 1 ? const Color(0xFFA44AFF) : const Color(0xffA19CC5),
+                size: 32,
+              ),
+              label: '',
+            ),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.home),
-            label: 'Melhih',
+          Center(
+            child: NavigationDestination(
+              icon: Icon(
+                Icons.home,
+                size: 32,
+                color: selectedPage == 2 ? const Color(0xFFA44AFF) : const Color(0xffA19CC5),
+              ),
+              label: '',
+            ),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.bookmark_border),
-            label: 'Eywa',
+          Center(
+            child: NavigationDestination(
+              icon: Icon(
+                Icons.bookmark_border,
+                size: 32,
+                color: selectedPage == 3 ? const Color(0xFFA44AFF) : const Color(0xffA19CC5),
+              ),
+              label: '',
+            ),
           ),
         ],
       ),

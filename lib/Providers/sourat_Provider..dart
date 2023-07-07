@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -8,7 +7,7 @@ import 'package:quran_app/Modals/SouratModal.dart';
 
 class SouratProvider extends ChangeNotifier {
   List<SouratModal> _sourat = [
-    SouratModal(id: 0, nameArabic: "", type: "", totalVerses: 0),
+    SouratModal(id: 0, nameArabic: "", nameEng: '', type: "", totalVerses: 0),
     // Add more objects as needed
   ];
 
@@ -16,13 +15,36 @@ class SouratProvider extends ChangeNotifier {
 
   List<SouratModal> get sourat => _sourat;
 
-  getMyData() async {
+  Future<void> getMyData() async {
     isLoading = true;
     final surahs = await fetchSurahInfo(1, 10);
     _sourat = surahs;
     isLoading = false;
     notifyListeners();
   }
+
+  Future<List<SouratModal>> readSurahList() async {
+    List<SouratModal> surahs = [];
+    // Load the JSON file from the assets
+    String jsonString = await rootBundle.loadString('assets/data/SurahsList.json');
+
+    // Parse the JSON string into a Map or List
+    var jsonData = json.decode(jsonString);
+    for (var surah in jsonData["chapters"]) {
+      surahs.add(
+        SouratModal(
+          id: surah['id'],
+          nameEng: surah['name_simple'],
+          nameArabic: surah['name_arabic'],
+          type: surah['revelation_place'],
+          totalVerses: surah['verses_count'],
+        ),
+      );
+    }
+    return surahs;
+  }
+
+  // ***
 
   Future<List<SouratModal>> fetchSurahInfo(int start, int end) async {
     final options = {
@@ -52,6 +74,7 @@ class SouratProvider extends ChangeNotifier {
 
         final surah = SouratModal(
           id: id,
+          nameEng: '',
           nameArabic: nameArabic,
           type: type,
           totalVerses: totalVerses,

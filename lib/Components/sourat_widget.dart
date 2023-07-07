@@ -1,7 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quran_app/Pages/quran_reading_page.dart';
 import 'package:quran_app/Providers/sourat_Provider..dart';
+
+import '../Modals/SouratModal.dart';
 
 class SouraWidget extends StatefulWidget {
   const SouraWidget({
@@ -13,7 +15,8 @@ class SouraWidget extends StatefulWidget {
 }
 
 class _SouraWidgetState extends State<SouraWidget> {
-  ScrollController _scrollController = ScrollController();
+  final List<dynamic> surahs = [];
+  SouratProvider? dataProvider;
   bool isLoadingMore = false;
 
   @override
@@ -21,156 +24,153 @@ class _SouraWidgetState extends State<SouraWidget> {
     super.initState();
     final dataProvider = Provider.of<SouratProvider>(context, listen: false);
     dataProvider.getMyData();
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        // Reach the end of the list, load more data
-        if (!isLoadingMore) {
-          setState(() {
-            isLoadingMore = true;
-          });
-          dataProvider.loadMoreData().then((_) {
-            setState(() {
-              isLoadingMore = false;
-            });
-          });
-        }
-      }
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<SouratProvider>(
-      builder: (context, dataProvider, _) {
-        if (dataProvider.isLoading) {
-          // Display a loading indicator
-          return CircularProgressIndicator();
-        } else {
-          final surahs = dataProvider.sourat;
-
-          return SizedBox(
-            height: 500,
-            child: ListView.builder(
-              controller: _scrollController,
-              itemCount: surahs.length,
+    dataProvider ??= Provider.of<SouratProvider>(context, listen: true);
+    return SizedBox(
+      height: 500,
+      child: FutureBuilder<List<SouratModal>>(
+        future: dataProvider!.readSurahList(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            throw ("Error ${snapshot.error}");
+          } else {
+            final surahs = snapshot.data;
+            return ListView.builder(
+              itemCount: surahs!.length,
               itemBuilder: (context, index) {
-                if (index == surahs.length) {
-                  // Last item, show loading indicator if more data is being loaded
-                  return isLoadingMore
-                      ? CircularProgressIndicator()
-                      : SizedBox();
-                } else {
-                  final surah = surahs[index];
-
-                  return Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Color(0xFF7B80AD),
-                          width: 1.0,
-                        ),
-                      ),
-                    ),
-                    width: 370,
-                    height: 62,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Row(
+                final surah = surahs[index];
+                return Column(
+                  children: [
+                    InkWell(
+                      //here add the navigation item
+                      onTap: () {
+                        Navigator.pushNamed(context, QuranReadingPage.route);
+                      },
+                      child: SizedBox(
+                        width: 370,
+                        height: 62,
+                        child: Column(
                           children: [
-                            Stack(
-                              alignment: Alignment.center,
+                            Row(
                               children: [
-                                Image.asset(
-                                  'assets/Images/Star.png',
-                                  width: 60,
-                                  height: 60,
+                                Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'assets/Images/Star.png',
+                                      width: 60,
+                                      height: 60,
+                                    ),
+                                    Text(
+                                      surah.id.toString(),
+                                      style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  surah.id.toString(),
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  surah.nameArabic.toString(),
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Row(
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      surah.type.toString(),
-                                      style: TextStyle(
+                                      surah.nameEng.toString(),
+                                      style: const TextStyle(
                                         fontFamily: 'Poppins',
-                                        fontSize: 13,
-                                        color: Color(0xFFA19CC5),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Icon(
-                                      Icons.circle,
-                                      color: Color(0xFFBBC4CE),
-                                      size: 4,
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      '${surah.totalVerses.toString()} verses',
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        fontFamily: 'Poppins',
-                                        color: Color(0xFFA19CC5),
-                                      ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          surah.type.toString(),
+                                          style: const TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 13,
+                                            color: Color(0xFFA19CC5),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        const Icon(
+                                          Icons.circle,
+                                          color: Color(0xFFBBC4CE),
+                                          size: 4,
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          '${surah.totalVerses.toString()} verses',
+                                          style: const TextStyle(
+                                            fontSize: 13,
+                                            fontFamily: 'Poppins',
+                                            color: Color(0xFFA19CC5),
+                                          ),
+                                        )
+                                      ],
                                     )
                                   ],
-                                )
-                              ],
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    surah.nameArabic.toString(),
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFFA44AFF),
-                                      fontFamily: 'Amiri',
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        surah.nameArabic.toString(),
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFFA44AFF),
+                                          fontFamily: 'Amiri',
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  );
-                }
+                    Divider(
+                      thickness: 0.8,
+                      indent: 15,
+                      endIndent: 10,
+                      color: const Color(0xff7B80AD).withOpacity(0.35),
+                    )
+                  ],
+                );
               },
-            ),
-          );
-        }
-      },
+            );
+          }
+        },
+      ),
     );
+
+    // return Consumer<SouratProvider>(
+    //   builder: (context, dataProvider, _) {
+    //     if (dataProvider.isLoading) {
+    //       Display a loading indicator
+    //       return const CircularProgressIndicator();
+    //     } else {
+    //       final surahs = dataProvider.sourat;
+
+    //       return
+    //     }
+    //   },
+    // );
   }
 }

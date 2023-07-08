@@ -4,11 +4,16 @@ import 'package:provider/provider.dart';
 import 'package:quran_app/Pages/quran_reading_page.dart';
 import 'package:quran_app/Providers/TimePrayerProvider.dart';
 import 'package:quran_app/Providers/sourat_Provider..dart';
+import 'package:quran_app/Providers/verses_Provide.dart';
 
 void main() {
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => TimePrayerProvider()), ChangeNotifierProvider(create: (_) => SouratProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => TimePrayerProvider()),
+        ChangeNotifierProvider(create: (_) => SouratProvider()),
+        ChangeNotifierProvider(create: (_) => VersesProvider())
+      ],
       child: MaterialApp(
         theme: ThemeData(
           appBarTheme: const AppBarTheme(

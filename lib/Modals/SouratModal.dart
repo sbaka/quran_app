@@ -1,5 +1,5 @@
 class SouratModal {
-  final int? id;
+  final int id;
   final String? nameArabic;
   final String? type;
   final String? nameEng;

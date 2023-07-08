@@ -49,7 +49,11 @@ class _SouraWidgetState extends State<SouraWidget> {
                     InkWell(
                       //here add the navigation item
                       onTap: () {
-                        Navigator.pushNamed(context, QuranReadingPage.route);
+                        Navigator.pushNamed(
+                          context,
+                          QuranReadingPage.route,
+                          arguments: surah,
+                        );
                       },
                       child: SizedBox(
                         width: 370,

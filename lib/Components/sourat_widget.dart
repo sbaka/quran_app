@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quran_app/Pages/quran_reading_page.dart';
+import 'package:quran_app/Providers/last_Read_Provider.dart';
 import 'package:quran_app/Providers/sourat_Provider..dart';
 
 import '../Modals/SouratModal.dart';
@@ -17,6 +18,7 @@ class SouraWidget extends StatefulWidget {
 class _SouraWidgetState extends State<SouraWidget> {
   final List<dynamic> surahs = [];
   SouratProvider? dataProvider;
+  LastReadProvider? lastReadProvider;
   bool isLoadingMore = false;
 
   @override
@@ -29,6 +31,8 @@ class _SouraWidgetState extends State<SouraWidget> {
   @override
   Widget build(BuildContext context) {
     dataProvider ??= Provider.of<SouratProvider>(context, listen: true);
+    lastReadProvider ??= Provider.of<LastReadProvider>(context, listen: false);
+
     return SizedBox(
       height: 500,
       child: FutureBuilder<List<SouratModal>>(
@@ -53,7 +57,8 @@ class _SouraWidgetState extends State<SouraWidget> {
                           context,
                           QuranReadingPage.route,
                           arguments: surah,
-                        );
+                        ).then((value) =>
+                            {lastReadProvider!.loadLastReadSurahId()});
                       },
                       child: SizedBox(
                         width: 370,

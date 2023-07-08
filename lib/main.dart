@@ -3,6 +3,7 @@ import 'package:quran_app/Pages/home.dart';
 import 'package:provider/provider.dart';
 import 'package:quran_app/Pages/quran_reading_page.dart';
 import 'package:quran_app/Providers/TimePrayerProvider.dart';
+import 'package:quran_app/Providers/last_Read_Provider.dart';
 import 'package:quran_app/Providers/sourat_Provider..dart';
 import 'package:quran_app/Providers/verses_Provide.dart';
 
@@ -12,7 +13,8 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => TimePrayerProvider()),
         ChangeNotifierProvider(create: (_) => SouratProvider()),
-        ChangeNotifierProvider(create: (_) => VersesProvider())
+        ChangeNotifierProvider(create: (_) => VersesProvider()),
+        ChangeNotifierProvider(create: (_) => LastReadProvider())
       ],
       child: MaterialApp(
         theme: ThemeData(

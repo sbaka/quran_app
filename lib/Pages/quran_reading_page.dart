@@ -23,11 +23,12 @@ class _QuranReadingPageState extends State<QuranReadingPage> {
     surah = ModalRoute.of(context)!.settings.arguments as SouratModal;
     final dataProvider = Provider.of<VersesProvider>(context, listen: false);
     dataProvider.getMyData(surah.id);
+    _storeSelectedSurah();
   }
 
   Future<void> _storeSelectedSurah() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('selectedSurahId', surah.id);
+    await prefs.setString('selectedSurahName', surah.nameEng.toString());
   }
 
   @override

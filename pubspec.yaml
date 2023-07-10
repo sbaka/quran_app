@@ -77,6 +77,7 @@ flutter:
     - assets/Images/isha.png
     - assets/Images/Quran.png
     - assets/Images/Star.png
+    - assets/Images/basmala.png
     - assets/data/SurahsList.json
 
 

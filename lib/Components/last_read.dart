@@ -23,9 +23,7 @@ class _LastReadState extends State<LastRead> {
 
     return Container(
       decoration: BoxDecoration(
-        image: const DecorationImage(
-            image: AssetImage("assets/Images/Quran.png"),
-            alignment: Alignment.bottomRight),
+        image: const DecorationImage(image: AssetImage("assets/Images/Quran.png"), alignment: Alignment.bottomRight),
         borderRadius: BorderRadius.circular(10),
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
@@ -41,7 +39,7 @@ class _LastReadState extends State<LastRead> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
+          const Padding(
             padding: EdgeInsets.fromLTRB(8.0, 5, 0, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -69,10 +67,10 @@ class _LastReadState extends State<LastRead> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(8.0, 5, 0, 0),
+            padding: const EdgeInsets.fromLTRB(8.0, 5, 0, 0),
             child: Text(
               name,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontFamily: 'Poppins',
                 color: Colors.white,
@@ -80,7 +78,7 @@ class _LastReadState extends State<LastRead> {
               ),
             ),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.fromLTRB(8.0, 5, 0, 0),
             child: Text(
               'Ayah No: 1',

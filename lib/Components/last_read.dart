@@ -19,11 +19,13 @@ class _LastReadState extends State<LastRead> {
   Widget build(BuildContext context) {
     dataProvider ??= Provider.of<LastReadProvider>(context, listen: true);
 
-    String name = dataProvider?.lastReadsurahName;
+    String? name = dataProvider?.lastReadsurahName;
 
     return Container(
       decoration: BoxDecoration(
-        image: const DecorationImage(image: AssetImage("assets/Images/Quran.png"), alignment: Alignment.bottomRight),
+        image: const DecorationImage(
+            image: AssetImage("assets/Images/Quran.png"),
+            alignment: Alignment.bottomRight),
         borderRadius: BorderRadius.circular(10),
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
@@ -69,7 +71,7 @@ class _LastReadState extends State<LastRead> {
           Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 5, 0, 0),
             child: Text(
-              name,
+              name ?? "No Soura read yet",
               style: const TextStyle(
                 fontSize: 18,
                 fontFamily: 'Poppins',

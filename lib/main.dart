@@ -7,6 +7,8 @@ import 'package:quran_app/Providers/last_Read_Provider.dart';
 import 'package:quran_app/Providers/sourat_Provider..dart';
 import 'package:quran_app/Providers/verses_Provide.dart';
 
+import 'Providers/QiblahCompass_Provider.dart';
+
 void main() {
   runApp(
     MultiProvider(
@@ -14,7 +16,8 @@ void main() {
         ChangeNotifierProvider(create: (_) => TimePrayerProvider()),
         ChangeNotifierProvider(create: (_) => SouratProvider()),
         ChangeNotifierProvider(create: (_) => VersesProvider()),
-        ChangeNotifierProvider(create: (_) => LastReadProvider())
+        ChangeNotifierProvider(create: (_) => LastReadProvider()),
+        ChangeNotifierProvider(create: (_) => QiblahCompassProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(

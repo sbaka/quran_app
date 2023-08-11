@@ -69,7 +69,9 @@ class _HomeState extends State<Home> {
               icon: Icon(
                 Icons.home,
                 size: 32,
-                color: selectedPage == 0 ? const Color(0xFFA44AFF) : const Color(0xffA19CC5),
+                color: selectedPage == 0
+                    ? const Color(0xFFA44AFF)
+                    : const Color(0xffA19CC5),
               ),
               label: '',
             ),
@@ -78,7 +80,9 @@ class _HomeState extends State<Home> {
             child: NavigationDestination(
               icon: Icon(
                 Icons.light,
-                color: selectedPage == 1 ? const Color(0xFFA44AFF) : const Color(0xffA19CC5),
+                color: selectedPage == 1
+                    ? const Color(0xFFA44AFF)
+                    : const Color(0xffA19CC5),
                 size: 32,
               ),
               label: '',
@@ -89,7 +93,9 @@ class _HomeState extends State<Home> {
               icon: Icon(
                 Icons.home,
                 size: 32,
-                color: selectedPage == 2 ? const Color(0xFFA44AFF) : const Color(0xffA19CC5),
+                color: selectedPage == 2
+                    ? const Color(0xFFA44AFF)
+                    : const Color(0xffA19CC5),
               ),
               label: '',
             ),
@@ -99,7 +105,9 @@ class _HomeState extends State<Home> {
               icon: Icon(
                 Icons.bookmark_border,
                 size: 32,
-                color: selectedPage == 3 ? const Color(0xFFA44AFF) : const Color(0xffA19CC5),
+                color: selectedPage == 3
+                    ? const Color(0xFFA44AFF)
+                    : const Color(0xffA19CC5),
               ),
               label: '',
             ),

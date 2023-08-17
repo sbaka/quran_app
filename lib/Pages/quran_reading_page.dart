@@ -23,6 +23,8 @@ class _QuranReadingPageState extends State<QuranReadingPage> {
     super.didChangeDependencies();
     surah = ModalRoute.of(context)!.settings.arguments as SouratModal;
     _storeSelectedSurah();
+    dataProvider = Provider.of<VersesProvider>(context, listen: false);
+    dataProvider!.getData(surah.id); // Fetch verses data for the surah
   }
 
   //to save the last read surah

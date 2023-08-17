@@ -11,8 +11,21 @@ class VersesProvider extends ChangeNotifier {
 
   List<VerseModal> get verses => _verses;
 
+  Future<void> getData(int id) async {
+    isLoading = true;
+    try {
+      _verses = await fetchVerses(id);
+      print(_verses[0].content);
+    } catch (error) {
+      print('Error: $error');
+      _verses = [];
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<List<VerseModal>> fetchVerses(int id) async {
-    print(id);
     try {
       // Load the JSON asset
       String jsonString =

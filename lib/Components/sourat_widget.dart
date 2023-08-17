@@ -4,8 +4,6 @@ import 'package:quran_app/Pages/quran_reading_page.dart';
 import 'package:quran_app/Providers/last_Read_Provider.dart';
 import 'package:quran_app/Providers/sourat_Provider.dart';
 
-import '../Modals/SouratModal.dart';
-
 class SouraWidget extends StatefulWidget {
   const SouraWidget({
     super.key,
@@ -16,42 +14,43 @@ class SouraWidget extends StatefulWidget {
 }
 
 class _SouraWidgetState extends State<SouraWidget> {
-  final List<dynamic> surahs = [];
   SouratProvider? dataProvider;
   LastReadProvider? lastReadProvider;
-  bool isLoadingMore = false;
+
+  @override
+  void initState() {
+    super.initState();
+    dataProvider = Provider.of<SouratProvider>(context, listen: false);
+    lastReadProvider = Provider.of<LastReadProvider>(context, listen: false);
+    dataProvider!.getMyData();
+  }
 
   @override
   Widget build(BuildContext context) {
-    dataProvider ??= Provider.of<SouratProvider>(context, listen: true);
-    lastReadProvider ??= Provider.of<LastReadProvider>(context, listen: false);
+    return Consumer<SouratProvider>(
+      builder: (context, dataProvider, _) {
+        if (dataProvider.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else {
+          final surahs = dataProvider.sourat;
 
-    return SizedBox(
-      height: 500,
-      child: FutureBuilder<List<SouratModal>>(
-        future: dataProvider!.readSurahList(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            throw ("Error ${snapshot.error}");
-          } else {
-            final surahs = snapshot.data;
-            return ListView.builder(
-              itemCount: surahs!.length,
+          return SizedBox(
+            height: 500,
+            child: ListView.builder(
+              itemCount: surahs.length,
               itemBuilder: (context, index) {
                 final surah = surahs[index];
                 return Column(
                   children: [
                     InkWell(
-                      //here add the navigation item
                       onTap: () {
                         Navigator.pushNamed(
                           context,
                           QuranReadingPage.route,
                           arguments: surah,
-                        ).then((value) =>
-                            {lastReadProvider!.loadLastReadSurahId()});
+                        ).then((value) {
+                          lastReadProvider!.loadLastReadSurahId();
+                        });
                       },
                       child: SizedBox(
                         width: 370,
@@ -144,6 +143,7 @@ class _SouraWidgetState extends State<SouraWidget> {
                               ],
                             ),
                           ],
+                          // Rest of your code
                         ),
                       ),
                     ),
@@ -156,23 +156,10 @@ class _SouraWidgetState extends State<SouraWidget> {
                   ],
                 );
               },
-            );
-          }
-        },
-      ),
+            ),
+          );
+        }
+      },
     );
-
-    // return Consumer<SouratProvider>(
-    //   builder: (context, dataProvider, _) {
-    //     if (dataProvider.isLoading) {
-    //       Display a loading indicator
-    //       return const CircularProgressIndicator();
-    //     } else {
-    //       final surahs = dataProvider.sourat;
-
-    //       return
-    //     }
-    //   },
-    // );
   }
 }

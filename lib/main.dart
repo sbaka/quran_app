@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:quran_app/Pages/quran_reading_page.dart';
 import 'package:quran_app/Providers/TimePrayerProvider.dart';
 import 'package:quran_app/Providers/last_Read_Provider.dart';
-import 'package:quran_app/Providers/sourat_Provider..dart';
+import 'package:quran_app/Providers/sourat_Provider.dart';
 import 'package:quran_app/Providers/verses_Provide.dart';
 
 import 'Providers/QiblahCompass_Provider.dart';

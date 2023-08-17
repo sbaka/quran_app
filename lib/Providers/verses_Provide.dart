@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
 import 'dart:convert';
 
 import '../Modals/VerseModal.dart';
@@ -11,45 +11,29 @@ class VersesProvider extends ChangeNotifier {
 
   List<VerseModal> get verses => _verses;
 
-  Future<void> getMyData(int id) async {
-    isLoading = true;
-    final verses = await fetchVerses(id);
-    _verses = verses;
-    print(_verses[0].content);
-    isLoading = false;
-    notifyListeners();
-  }
-
   Future<List<VerseModal>> fetchVerses(int id) async {
-    final url = Uri.parse('https://al-quran1.p.rapidapi.com/$id');
-
-    final headers = {
-      'X-RapidAPI-Key': '25a0c6ee81msh64c3a6ce890c94dp158a6bjsn3fbb12e5af7d',
-      'X-RapidAPI-Host': 'al-quran1.p.rapidapi.com',
-    };
-
+    print(id);
     try {
-      final response = await http.get(url, headers: headers);
-      if (response.statusCode == 200) {
-        final jsonData = json.decode(response.body);
-        final versesData = jsonData['verses'];
+      // Load the JSON asset
+      String jsonString =
+          await rootBundle.loadString('assets/data/surah/surah_$id.json');
+      final jsonData = json.decode(jsonString);
 
-        List<VerseModal> verses = [];
-        versesData.forEach((key, value) {
-          VerseModal verse = VerseModal(
-            content: value['content'],
-            translationEng: value['translation_eng'],
-          );
-          verses.add(verse);
-        });
-        return verses;
-      } else {
-        print('Request failed with status: ${response.statusCode}');
-      }
+      final versesData = jsonData['verse'];
+
+      List<VerseModal> verses = [];
+      versesData.forEach((key, value) {
+        VerseModal verse = VerseModal(
+          content: value,
+          translationEng: '', // You can set translation here if available
+        );
+        verses.add(verse);
+      });
+
+      return verses;
     } catch (error) {
       print('Error: $error');
+      return [];
     }
-
-    return []; // Return an empty list if there's an error
   }
 }

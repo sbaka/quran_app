@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quran_app/Pages/quran_reading_page.dart';
 import 'package:quran_app/Providers/last_Read_Provider.dart';
-import 'package:quran_app/Providers/sourat_Provider..dart';
+import 'package:quran_app/Providers/sourat_Provider.dart';
 
 import '../Modals/SouratModal.dart';
 
@@ -20,13 +20,6 @@ class _SouraWidgetState extends State<SouraWidget> {
   SouratProvider? dataProvider;
   LastReadProvider? lastReadProvider;
   bool isLoadingMore = false;
-
-  @override
-  void initState() {
-    super.initState();
-    final dataProvider = Provider.of<SouratProvider>(context, listen: false);
-    dataProvider.getMyData();
-  }
 
   @override
   Widget build(BuildContext context) {

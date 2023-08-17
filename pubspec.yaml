@@ -80,7 +80,8 @@ flutter:
     - assets/Images/Quran.png
     - assets/Images/Star.png
     - assets/Images/basmala.png
-    - assets/data/SurahsList.json
+    - assets/data/
+    - assets/data/surah/
     - assets/Images/qibla.png
     - assets/Images/needle.svg
     - assets/Images/compass.svg

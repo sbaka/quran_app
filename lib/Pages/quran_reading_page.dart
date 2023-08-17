@@ -16,16 +16,16 @@ class QuranReadingPage extends StatefulWidget {
 
 class _QuranReadingPageState extends State<QuranReadingPage> {
   late SouratModal surah;
+  VersesProvider? dataProvider;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     surah = ModalRoute.of(context)!.settings.arguments as SouratModal;
-    final dataProvider = Provider.of<VersesProvider>(context, listen: false);
-    dataProvider.getMyData(surah.id);
     _storeSelectedSurah();
   }
 
+  //to save the last read surah
   Future<void> _storeSelectedSurah() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('selectedSurahName', surah.nameEng.toString());
@@ -33,6 +33,8 @@ class _QuranReadingPageState extends State<QuranReadingPage> {
 
   @override
   Widget build(BuildContext context) {
+    dataProvider ??= Provider.of<VersesProvider>(context, listen: true);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(surah.nameEng ?? ''),

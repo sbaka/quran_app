@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,13 +19,14 @@ class quranReading_Widget extends StatefulWidget {
 
 class _quranReading_WidgetState extends State<quranReading_Widget> {
   VersesProvider? dataProvider;
+  int?
+      selectedVerseIndex; // Track the index of the verse that is currently playing
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     dataProvider = Provider.of<VersesProvider>(context, listen: false);
-    dataProvider!.getData(widget.id); // Fetch verses data for the surah
+    dataProvider!.getData(widget.id);
   }
 
   @override
@@ -35,6 +37,8 @@ class _quranReading_WidgetState extends State<quranReading_Widget> {
           itemCount: versesProvider.verses.length,
           itemBuilder: (context, index) {
             VerseModal verse = versesProvider.verses[index];
+            bool isCurrentVersePlaying = selectedVerseIndex == index;
+
             return Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
@@ -56,14 +60,15 @@ class _quranReading_WidgetState extends State<quranReading_Widget> {
                             Container(
                               width: 27,
                               height: 27,
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Color(0xFFA44AFF),
+                                color: isCurrentVersePlaying
+                                    ? Colors.green
+                                    : Color(0xFFA44AFF),
                               ),
                             ),
                             Text(
-                              (index + 1)
-                                  .toString(), // Display index + 1 as the verse number
+                              (index + 1).toString(),
                               style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 14,
@@ -75,9 +80,7 @@ class _quranReading_WidgetState extends State<quranReading_Widget> {
                         ),
                         const Spacer(),
                         IconButton(
-                          onPressed: () {
-                            // Add your share action here
-                          },
+                          onPressed: () {},
                           icon: const Icon(
                             Icons.share_outlined,
                             color: Color(0xFFA44AFF),
@@ -86,18 +89,28 @@ class _quranReading_WidgetState extends State<quranReading_Widget> {
                         ),
                         IconButton(
                           onPressed: () {
-                            // Add your play action here
+                            if (isCurrentVersePlaying) {
+                              dataProvider!.stopAudio();
+                              setState(() {
+                                selectedVerseIndex = null;
+                              });
+                            } else {
+                              dataProvider!.playAudio(verse.audioData);
+                              setState(() {
+                                selectedVerseIndex = index;
+                              });
+                            }
                           },
-                          icon: const Icon(
-                            Icons.play_circle_outline_outlined,
+                          icon: Icon(
+                            isCurrentVersePlaying
+                                ? Icons.stop_circle_outlined
+                                : Icons.play_circle_outline_outlined,
                             color: Color(0xFFA44AFF),
                             size: 25,
                           ),
                         ),
                         IconButton(
-                          onPressed: () {
-                            // Add your save action here
-                          },
+                          onPressed: () {},
                           icon: const Icon(
                             Icons.bookmark_border_outlined,
                             color: Color(0xFFA44AFF),
@@ -111,7 +124,7 @@ class _quranReading_WidgetState extends State<quranReading_Widget> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      verse.content, // Display the Arabic content of the verse
+                      verse.content,
                       style: const TextStyle(
                         fontFamily: 'Amiri',
                         fontSize: 18,
@@ -124,7 +137,7 @@ class _quranReading_WidgetState extends State<quranReading_Widget> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      verse.translationEng, // Display the English translation
+                      verse.translationEng,
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16,

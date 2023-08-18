@@ -46,6 +46,7 @@ dependencies:
   shared_preferences: ^2.2.0
   flutter_qiblah: ^2.2.0
   flutter_svg: ^2.0.7
+  audioplayers: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -82,6 +83,121 @@ flutter:
     - assets/Images/basmala.png
     - assets/data/
     - assets/data/surah/
+    - assets/data/audio/
+    - assets/data/audio/001/
+    - assets/data/audio/002/
+    - assets/data/audio/003/
+    - assets/data/audio/004/
+    - assets/data/audio/005/
+    - assets/data/audio/006/
+    - assets/data/audio/007/
+    - assets/data/audio/008/
+    - assets/data/audio/009/
+    - assets/data/audio/010/
+    - assets/data/audio/011/
+    - assets/data/audio/012/
+    - assets/data/audio/013/
+    - assets/data/audio/014/
+    - assets/data/audio/015/
+    - assets/data/audio/016/
+    - assets/data/audio/017/
+    - assets/data/audio/018/
+    - assets/data/audio/019/
+    - assets/data/audio/020/
+    - assets/data/audio/021/
+    - assets/data/audio/022/
+    - assets/data/audio/023/
+    - assets/data/audio/024/
+    - assets/data/audio/025/
+    - assets/data/audio/026/
+    - assets/data/audio/027/
+    - assets/data/audio/028/
+    - assets/data/audio/029/
+    - assets/data/audio/030/
+    - assets/data/audio/031/
+    - assets/data/audio/032/
+    - assets/data/audio/033/
+    - assets/data/audio/034/
+    - assets/data/audio/035/
+    - assets/data/audio/036/
+    - assets/data/audio/037/
+    - assets/data/audio/038/
+    - assets/data/audio/039/
+    - assets/data/audio/040/
+    - assets/data/audio/041/
+    - assets/data/audio/042/
+    - assets/data/audio/043/
+    - assets/data/audio/044/
+    - assets/data/audio/045/
+    - assets/data/audio/046/
+    - assets/data/audio/047/
+    - assets/data/audio/048/
+    - assets/data/audio/049/
+    - assets/data/audio/050/
+    - assets/data/audio/051/
+    - assets/data/audio/052/
+    - assets/data/audio/053/
+    - assets/data/audio/054/
+    - assets/data/audio/055/
+    - assets/data/audio/056/
+    - assets/data/audio/057/
+    - assets/data/audio/058/
+    - assets/data/audio/059/
+    - assets/data/audio/060/
+    - assets/data/audio/061/
+    - assets/data/audio/062/
+    - assets/data/audio/063/
+    - assets/data/audio/064/
+    - assets/data/audio/065/
+    - assets/data/audio/066/
+    - assets/data/audio/067/
+    - assets/data/audio/068/
+    - assets/data/audio/069/
+    - assets/data/audio/070/
+    - assets/data/audio/071/
+    - assets/data/audio/072/
+    - assets/data/audio/073/
+    - assets/data/audio/074/
+    - assets/data/audio/075/
+    - assets/data/audio/076/
+    - assets/data/audio/077/
+    - assets/data/audio/078/
+    - assets/data/audio/079/
+    - assets/data/audio/080/
+    - assets/data/audio/081/
+    - assets/data/audio/082/
+    - assets/data/audio/083/
+    - assets/data/audio/084/
+    - assets/data/audio/085/
+    - assets/data/audio/086/
+    - assets/data/audio/087/
+    - assets/data/audio/088/
+    - assets/data/audio/089/
+    - assets/data/audio/090/
+    - assets/data/audio/091/
+    - assets/data/audio/092/
+    - assets/data/audio/093/
+    - assets/data/audio/094/
+    - assets/data/audio/095/
+    - assets/data/audio/096/
+    - assets/data/audio/097/
+    - assets/data/audio/098/
+    - assets/data/audio/099/
+    - assets/data/audio/100/
+    - assets/data/audio/101/
+    - assets/data/audio/102/
+    - assets/data/audio/103/
+    - assets/data/audio/104/
+    - assets/data/audio/105/
+    - assets/data/audio/106/
+    - assets/data/audio/107/
+    - assets/data/audio/108/
+    - assets/data/audio/109/
+    - assets/data/audio/110/
+    - assets/data/audio/111/
+    - assets/data/audio/112/
+    - assets/data/audio/113/
+    - assets/data/audio/114/
     - assets/data/translation/en/
     - assets/Images/qibla.png
     - assets/Images/needle.svg

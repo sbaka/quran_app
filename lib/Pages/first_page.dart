@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:quran_app/Components/sourat_widget.dart';
+import 'package:quran_app/Components/souratList_widget.dart';
 
-import '../Components/last_read.dart';
+import '../Components/lastRead_Widget.dart';
 
 class FirstPage extends StatefulWidget {
   const FirstPage({super.key});

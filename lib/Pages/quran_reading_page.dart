@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:quran_app/Modals/SouratModal.dart';
 
 import 'package:quran_app/Providers/verses_Provide.dart';

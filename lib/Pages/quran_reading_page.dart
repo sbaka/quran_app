@@ -5,6 +5,7 @@ import 'package:quran_app/Modals/SouratModal.dart';
 import 'package:quran_app/Providers/verses_Provide.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Components/quranReading_Widget.dart';
 import '../Components/surahReadingInformations_widget.dart';
 
 class QuranReadingPage extends StatefulWidget {
@@ -25,8 +26,6 @@ class _QuranReadingPageState extends State<QuranReadingPage> {
     super.didChangeDependencies();
     surah = ModalRoute.of(context)!.settings.arguments as SouratModal;
     _storeSelectedSurah();
-    dataProvider = Provider.of<VersesProvider>(context, listen: false);
-    dataProvider!.getData(surah.id); // Fetch verses data for the surah
   }
 
   //to save the last read surah
@@ -37,8 +36,6 @@ class _QuranReadingPageState extends State<QuranReadingPage> {
 
   @override
   Widget build(BuildContext context) {
-    dataProvider ??= Provider.of<VersesProvider>(context, listen: true);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(surah.nameEng ?? ''),
@@ -52,15 +49,8 @@ class _QuranReadingPageState extends State<QuranReadingPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SurahReadingInformationsWidget(
-              surah: surah), // Use the extracted widget here
-
-          const Expanded(
-            flex: 5,
-            child: Column(
-              children: [],
-            ),
-          ),
+          SurahReadingInformationsWidget(surah: surah),
+          Expanded(flex: 5, child: quranReading_Widget(id: surah.id)),
         ],
       ),
     );

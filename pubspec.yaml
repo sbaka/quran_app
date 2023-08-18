@@ -82,6 +82,7 @@ flutter:
     - assets/Images/basmala.png
     - assets/data/
     - assets/data/surah/
+    - assets/data/translation/en/
     - assets/Images/qibla.png
     - assets/Images/needle.svg
     - assets/Images/compass.svg

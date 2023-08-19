@@ -19,8 +19,6 @@ class quranReading_Widget extends StatefulWidget {
 
 class _quranReading_WidgetState extends State<quranReading_Widget> {
   VersesProvider? dataProvider;
-  int?
-      selectedVerseIndex; // Track the index of the verse that is currently playing
 
   @override
   void initState() {
@@ -37,7 +35,8 @@ class _quranReading_WidgetState extends State<quranReading_Widget> {
           itemCount: versesProvider.verses.length,
           itemBuilder: (context, index) {
             VerseModal verse = versesProvider.verses[index];
-            bool isCurrentVersePlaying = selectedVerseIndex == index;
+            final isCurrentVersePlaying =
+                index == versesProvider.currentPlayingIndex;
 
             return Padding(
               padding:
@@ -89,16 +88,11 @@ class _quranReading_WidgetState extends State<quranReading_Widget> {
                         ),
                         IconButton(
                           onPressed: () {
-                            if (isCurrentVersePlaying) {
-                              dataProvider!.stopAudio();
-                              setState(() {
-                                selectedVerseIndex = null;
-                              });
+                            if (versesProvider.isPlaying &&
+                                index == versesProvider.currentPlayingIndex) {
+                              versesProvider.stopAudio();
                             } else {
-                              dataProvider!.playAudio(verse.audioData);
-                              setState(() {
-                                selectedVerseIndex = index;
-                              });
+                              versesProvider.playAudio(verse.audioData, index);
                             }
                           },
                           icon: Icon(

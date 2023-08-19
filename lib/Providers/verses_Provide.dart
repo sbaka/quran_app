@@ -12,21 +12,29 @@ class VersesProvider extends ChangeNotifier {
 
   List<VerseModal> get verses => _verses;
 
-  AudioPlayer _audioPlayer = AudioPlayer();
+  final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isPlaying = false;
 
   bool get isPlaying => _isPlaying;
+  int? currentPlayingIndex;
 
-  Future<void> playAudio(String audioUrl) async {
+  Future<void> playAudio(String audioUrl, int index) async {
     await _audioPlayer.play(AssetSource(audioUrl));
     _isPlaying = true;
+    currentPlayingIndex = index;
+    _audioPlayer.onPlayerComplete.listen((event) {
+      _isPlaying = false;
+      currentPlayingIndex = null;
+      notifyListeners();
+    });
     notifyListeners();
   }
 
-  Future<void> stopAudio() async {
+  void stopAudio() {
     if (_isPlaying) {
-      await _audioPlayer.stop();
+      _audioPlayer.stop();
       _isPlaying = false;
+      currentPlayingIndex = null;
       notifyListeners();
     }
   }

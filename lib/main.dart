@@ -6,10 +6,17 @@ import 'package:quran_app/Providers/TimePrayerProvider.dart';
 import 'package:quran_app/Providers/last_Read_Provider.dart';
 import 'package:quran_app/Providers/sourat_Provider.dart';
 import 'package:quran_app/Providers/verses_Provide.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
+import 'Hive/lastReadAdapter.dart';
 import 'Providers/QiblahCompass_Provider.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(LastReadAdapter()); // Register the adapter
+
+  await Hive.openBox<String>('lastReadBox');
+
   runApp(
     MultiProvider(
       providers: [

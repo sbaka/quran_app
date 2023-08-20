@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:quran_app/Modals/SouratModal.dart';
 
 import 'package:quran_app/Providers/verses_Provide.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Components/quranReading_Widget.dart';
 import '../Components/surahReadingInformations_widget.dart';
+import '../Providers/last_Read_Provider.dart';
 
 class QuranReadingPage extends StatefulWidget {
   static const String route = '/quranReadingPage';
@@ -18,19 +19,15 @@ class QuranReadingPage extends StatefulWidget {
 
 class _QuranReadingPageState extends State<QuranReadingPage> {
   late SouratModal surah;
+  LastReadProvider? lastReadProvider;
   VersesProvider? dataProvider;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     surah = ModalRoute.of(context)!.settings.arguments as SouratModal;
-    _storeSelectedSurah();
-  }
-
-  //to save the last read surah
-  Future<void> _storeSelectedSurah() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('selectedSurahName', surah.nameEng.toString());
+    lastReadProvider = Provider.of<LastReadProvider>(context, listen: false);
+    lastReadProvider?.storeLastReadSurahName(surah.nameEng.toString());
   }
 
   @override

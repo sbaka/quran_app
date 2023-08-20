@@ -48,9 +48,7 @@ class _SouraWidgetState extends State<SouraWidget> {
                           context,
                           QuranReadingPage.route,
                           arguments: surah,
-                        ).then((value) {
-                          lastReadProvider!.loadLastReadSurahId();
-                        });
+                        );
                       },
                       child: SizedBox(
                         width: 370,

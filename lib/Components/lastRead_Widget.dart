@@ -17,10 +17,6 @@ class _LastReadState extends State<LastRead> {
 
   @override
   Widget build(BuildContext context) {
-    dataProvider ??= Provider.of<LastReadProvider>(context, listen: true);
-
-    String? name = dataProvider?.lastReadsurahName;
-
     return Container(
       decoration: BoxDecoration(
         image: const DecorationImage(
@@ -68,17 +64,22 @@ class _LastReadState extends State<LastRead> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 5, 0, 0),
-            child: Text(
-              name ?? "No Soura read yet",
-              style: const TextStyle(
-                fontSize: 18,
-                fontFamily: 'Poppins',
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+          Consumer<LastReadProvider>(
+            builder: (context, dataProvider, _) {
+              String? name = dataProvider.getLastReadSurahName();
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 5, 0, 0),
+                child: Text(
+                  name ?? "No Surah read yet",
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'Poppins',
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              );
+            },
           ),
           const Padding(
             padding: EdgeInsets.fromLTRB(8.0, 5, 0, 0),

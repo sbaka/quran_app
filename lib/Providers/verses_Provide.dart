@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
 import 'dart:convert';
 
 import '../Modals/VerseModal.dart';
@@ -21,6 +22,10 @@ class VersesProvider extends ChangeNotifier {
   int _currentSpokenWordIndex = 0;
 
   int get currentSpokenWordIndex => _currentSpokenWordIndex;
+
+  bool _isChromeReaderMode = false;
+
+  bool get isChromeReaderMode => _isChromeReaderMode;
 
   Future<void> playAudio(String audioUrl, int index) async {
     await _audioPlayer.play(AssetSource(audioUrl));
@@ -58,6 +63,16 @@ class VersesProvider extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  void shareContent(String content) {
+    Share.share(content);
+  }
+
+  void toggleChromeReaderMode() {
+    _isChromeReaderMode = !_isChromeReaderMode;
+    print(_isChromeReaderMode);
+    notifyListeners();
   }
 
   Future<List<VerseModal>> fetchVerses(int id) async {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quran_app/Modals/SouratModal.dart';
+import 'package:quran_app/Pages/SearchPage.dart';
 
 import 'package:quran_app/Providers/verses_Provide.dart';
 
@@ -37,7 +38,21 @@ class _QuranReadingPageState extends State<QuranReadingPage> {
         title: Text(surah.nameEng ?? ''),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                Provider.of<VersesProvider>(context, listen: false)
+                    .toggleChromeReaderMode();
+              });
+            },
+            icon: const Icon(Icons.chrome_reader_mode),
+          ),
+          IconButton(
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: SearchPage(),
+              );
+            },
             icon: const Icon(Icons.search),
           ),
         ],

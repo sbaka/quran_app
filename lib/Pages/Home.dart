@@ -50,7 +50,7 @@ class _HomeState extends State<Home> {
               child: Icon(
                 Icons.search,
                 size: 24,
-                color: Color(0xffA19CC5),
+                color: Colors.white,
               ),
             ),
           ),

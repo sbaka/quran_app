@@ -40,8 +40,7 @@ class _QuranReadingPageState extends State<QuranReadingPage> {
           IconButton(
             onPressed: () {
               setState(() {
-                Provider.of<VersesProvider>(context, listen: false)
-                    .toggleChromeReaderMode();
+                Provider.of<VersesProvider>(context, listen: false).toggleChromeReaderMode();
               });
             },
             icon: const Icon(Icons.chrome_reader_mode),
@@ -61,7 +60,10 @@ class _QuranReadingPageState extends State<QuranReadingPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SurahReadingInformationsWidget(surah: surah),
-          Expanded(flex: 5, child: quranReading_Widget(id: surah.id)),
+          Expanded(
+            flex: 5,
+            child: quranReading_Widget(id: surah.id),
+          ),
         ],
       ),
     );

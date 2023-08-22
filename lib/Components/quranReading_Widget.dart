@@ -38,12 +38,10 @@ class _quranReading_WidgetState extends State<quranReading_Widget> {
                 itemCount: versesProvider.verses.length,
                 itemBuilder: (context, index) {
                   VerseModal verse = versesProvider.verses[index];
-                  final isCurrentVersePlaying =
-                      index == versesProvider.currentPlayingIndex;
+                  final isCurrentVersePlaying = index == versesProvider.currentPlayingIndex;
 
                   return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                     child: Column(
                       children: [
                         Container(
@@ -64,9 +62,7 @@ class _quranReading_WidgetState extends State<quranReading_Widget> {
                                     height: 27,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: isCurrentVersePlaying
-                                          ? Colors.green
-                                          : Color(0xFFA44AFF),
+                                      color: isCurrentVersePlaying ? Colors.green : Color(0xFFA44AFF),
                                     ),
                                   ),
                                   Text(
@@ -93,19 +89,14 @@ class _quranReading_WidgetState extends State<quranReading_Widget> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  if (versesProvider.isPlaying &&
-                                      index ==
-                                          versesProvider.currentPlayingIndex) {
+                                  if (versesProvider.isPlaying && index == versesProvider.currentPlayingIndex) {
                                     versesProvider.stopAudio();
                                   } else {
-                                    versesProvider.playAudio(
-                                        verse.audioData, index);
+                                    versesProvider.playAudio(verse.audioData, index);
                                   }
                                 },
                                 icon: Icon(
-                                  isCurrentVersePlaying
-                                      ? Icons.stop_circle_outlined
-                                      : Icons.play_circle_outline_outlined,
+                                  isCurrentVersePlaying ? Icons.stop_circle_outlined : Icons.play_circle_outline_outlined,
                                   color: Color(0xFFA44AFF),
                                   size: 25,
                                 ),
@@ -169,7 +160,7 @@ class _quranReading_WidgetState extends State<quranReading_Widget> {
 class ChromeReaderModeWidget extends StatelessWidget {
   final List<VerseModal> verses;
 
-  ChromeReaderModeWidget({required this.verses});
+  const ChromeReaderModeWidget({super.key, required this.verses});
 
   String getVerseEndSymbol(int verseNumber, {bool arabicNumeral = true}) {
     var arabicNumeric = '';
@@ -177,18 +168,7 @@ class ChromeReaderModeWidget extends StatelessWidget {
 
     if (!arabicNumeral) return '\u06dd${verseNumber.toString()}';
 
-    const Map arabicNumbers = {
-      "0": "٠",
-      "1": "١",
-      "2": "٢",
-      "3": "٣",
-      "4": "٤",
-      "5": "٥",
-      "6": "٦",
-      "7": "٧",
-      "8": "٨",
-      "9": "٩"
-    };
+    const Map arabicNumbers = {"0": "٠", "1": "١", "2": "٢", "3": "٣", "4": "٤", "5": "٥", "6": "٦", "7": "٧", "8": "٨", "9": "٩"};
 
     for (var e in digits) {
       arabicNumeric += arabicNumbers[e];
@@ -199,33 +179,51 @@ class ChromeReaderModeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: SafeArea(
-            child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-                child: Wrap(
-                    children: verses
-                        .map((e) => Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  e.content +
-                                      " ${getVerseEndSymbol(verses.indexOf(e))}",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: "amiri",
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
-                            ))
-                        .toList())),
+    String suraStr = verses.map((e) => "${e.content} ${getVerseEndSymbol(verses.indexOf(e))}").reduce((value, element) => "$value  $element");
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+          child: Flexible(
+            child: Text(
+              suraStr,
+              textAlign: TextAlign.justify,
+              textDirection: TextDirection.rtl,
+              style: const TextStyle(
+                color: Colors.white,
+                fontFamily: "amiri",
+                fontSize: 20,
+              ),
+              softWrap: true,
+            ),
           ),
         ),
-      ],
+      ),
     );
   }
 }
+
+//  Wrap(
+//           alignment: WrapAlignment.end,
+//           children: verses
+//               .map(
+//                 (e) => Row(
+//                   mainAxisSize: MainAxisSize.min,
+//                   children: [
+//                     Flexible(
+//                       child: Text(
+//                         "${e.content} ",
+//                         textDirection: TextDirection.rtl,
+//                         style: const TextStyle(
+//                           color: Colors.white,
+//                           fontFamily: "amiri",
+//                           fontSize: 20,
+//                         ),
+//                         softWrap: true,
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               )
+//               .toList(),
+//         ),

@@ -18,6 +18,10 @@ class VersesProvider extends ChangeNotifier {
   bool get isPlaying => _isPlaying;
   int? currentPlayingIndex;
 
+  int _currentSpokenWordIndex = 0;
+
+  int get currentSpokenWordIndex => _currentSpokenWordIndex;
+
   Future<void> playAudio(String audioUrl, int index) async {
     await _audioPlayer.play(AssetSource(audioUrl));
     _isPlaying = true;
@@ -27,6 +31,7 @@ class VersesProvider extends ChangeNotifier {
       currentPlayingIndex = null;
       notifyListeners();
     });
+
     notifyListeners();
   }
 
@@ -35,6 +40,8 @@ class VersesProvider extends ChangeNotifier {
       _audioPlayer.stop();
       _isPlaying = false;
       currentPlayingIndex = null;
+      _currentSpokenWordIndex = 0; // Reset spoken word index
+
       notifyListeners();
     }
   }

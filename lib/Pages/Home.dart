@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quran_app/Pages/SearchPage.dart';
 import 'package:quran_app/Pages/first_page.dart';
 import 'package:quran_app/Pages/fourth_page.dart';
 import 'package:quran_app/Pages/second_page.dart';
@@ -37,7 +38,12 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.transparent,
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: SearchPage(),
+              );
+            },
             child: const SizedBox(
               width: 24,
               height: 24,

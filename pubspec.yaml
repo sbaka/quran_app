@@ -210,9 +210,9 @@ flutter:
 
 
   fonts:
-    - family: me_quran
+    - family: AmiriQuran
       fonts:
-        - asset: assets/Fonts/me_quran.ttf
+        - asset: assets/Fonts/AmiriQuran-Regular.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

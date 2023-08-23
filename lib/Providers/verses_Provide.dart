@@ -71,7 +71,6 @@ class VersesProvider extends ChangeNotifier {
 
   void toggleChromeReaderMode() {
     _isChromeReaderMode = !_isChromeReaderMode;
-    print(_isChromeReaderMode);
     notifyListeners();
   }
 

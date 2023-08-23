@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 import 'package:quran_app/Modals/SouratModal.dart';
 import 'package:quran_app/Pages/SearchPage.dart';
 
@@ -34,29 +35,54 @@ class _QuranReadingPageState extends State<QuranReadingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(surah.nameEng ?? ''),
-        actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                Provider.of<VersesProvider>(context, listen: false).toggleChromeReaderMode();
-              });
-            },
-            icon: const Icon(Icons.chrome_reader_mode),
-          ),
-          IconButton(
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: SearchPage(),
-              );
-            },
-            icon: const Icon(Icons.search),
-          ),
-        ],
-      ),
-      body: Column(
+        appBar: AppBar(
+          title: Text(surah.nameEng ?? ''),
+          actions: [
+            Consumer<VersesProvider>(
+              builder: (context, dataProvider, _) => IconButton(
+                onPressed: () {
+                  setState(() {
+                    dataProvider.toggleChromeReaderMode();
+                  });
+                },
+                icon: dataProvider.isChromeReaderMode
+                    ? const Icon(Icons.book)
+                    : const Icon(Icons.chrome_reader_mode),
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                showSearch(
+                  context: context,
+                  delegate: SearchPage(),
+                );
+              },
+              icon: const Icon(Icons.search),
+            ),
+          ],
+        ),
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              elevation: 0,
+              pinned: true,
+              centerTitle: false,
+              stretch: true,
+              automaticallyImplyLeading: false,
+              expandedHeight: 300.0,
+              flexibleSpace: FlexibleSpaceBar(
+                stretchModes: [StretchMode.zoomBackground],
+                background: SurahReadingInformationsWidget(surah: surah),
+              ),
+            ),
+            quranReading_Widget(id: surah.id),
+          ],
+        ));
+  }
+}
+
+/*Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SurahReadingInformationsWidget(surah: surah),
@@ -65,7 +91,4 @@ class _QuranReadingPageState extends State<QuranReadingPage> {
             child: quranReading_Widget(id: surah.id),
           ),
         ],
-      ),
-    );
-  }
-}
+      ),  */

@@ -46,8 +46,8 @@ class SurahReadingInformationsWidget extends StatelessWidget {
                         Text(
                           surah.nameArabic.toString(),
                           style: const TextStyle(
-                            fontFamily: 'Amiri',
-                            fontSize: 42,
+                            fontFamily: 'AlQalamQuran',
+                            fontSize: 55,
                           ),
                         ),
                         Text(

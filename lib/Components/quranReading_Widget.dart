@@ -128,9 +128,8 @@ class _quranReading_WidgetState extends State<quranReading_Widget> {
                             child: Text(
                               verse.content,
                               style: const TextStyle(
-                                fontFamily: 'Amiri',
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                                fontFamily: 'AlQalamQuran',
+                                fontSize: 30,
                                 color: Colors.white,
                               ),
                             ),
@@ -181,29 +180,29 @@ class ChromeReaderModeWidget extends StatelessWidget {
     if (!arabicNumeral) return '\u06dd${verseNumber.toString()}';
 
     const Map arabicNumbers = {
-      "0": "٠",
-      "1": "١",
-      "2": "٢",
-      "3": "٣",
-      "4": "٤",
-      "5": "٥",
-      "6": "٦",
-      "7": "٧",
-      "8": "٨",
-      "9": "٩"
+      "0": "\u{6F0}",
+      "1": "\u{6F1}",
+      "2": "\u{6F2}",
+      "3": "\u{6F3}",
+      "4": "\u{6F4}",
+      "5": "\u{6F5}",
+      "6": "\u{6F6}",
+      "7": "\u{6F7}",
+      "8": "\u{6F8}",
+      "9": "\u{6F9}"
     };
 
     for (var e in digits) {
       arabicNumeric += arabicNumbers[e];
     }
-
-    return '\u06dd$arabicNumeric';
+    print(arabicNumeric);
+    return "\u{FD3F} " + '$arabicNumeric' + " \u{FD3E}";
   }
 
   @override
   Widget build(BuildContext context) {
     String suraStr = verses
-        .map((e) => "${e.content} ${getVerseEndSymbol(verses.indexOf(e))}")
+        .map((e) => "${e.content}  ${getVerseEndSymbol(verses.indexOf(e))}")
         .reduce((value, element) => "$value  $element");
     return SliverToBoxAdapter(
       child: Container(
@@ -215,7 +214,7 @@ class ChromeReaderModeWidget extends StatelessWidget {
             textDirection: TextDirection.rtl,
             style: const TextStyle(
               color: Colors.white,
-              fontFamily: "AmiriQuran",
+              fontFamily: "AlQalamQuran",
               fontSize: 35,
             ),
             softWrap: true,

@@ -129,10 +129,9 @@ class _SouraWidgetState extends State<SouraWidget> {
                                       child: Text(
                                         surah.nameArabic.toString(),
                                         style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24,
                                           color: Color(0xFFA44AFF),
-                                          fontFamily: 'Amiri',
+                                          fontFamily: 'AlQalamQuran',
                                         ),
                                       ),
                                     ),

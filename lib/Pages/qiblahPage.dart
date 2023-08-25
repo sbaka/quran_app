@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quran_app/Components/QiblahCompass_Widget.dart';
+import 'package:quran_app/Components/QiblahCompass_widget.dart';
 
 import '../Providers/QiblahCompass_Provider.dart';
 
-class SecondPage extends StatefulWidget {
-  const SecondPage({super.key});
+class qiblahPage extends StatefulWidget {
+  const qiblahPage({super.key});
 
   @override
-  State<SecondPage> createState() => _SecondPageState();
+  State<qiblahPage> createState() => _qiblahPageState();
 }
 
-class _SecondPageState extends State<SecondPage> {
+class _qiblahPageState extends State<qiblahPage> {
   @override
   void initState() {
     super.initState();
@@ -23,9 +23,6 @@ class _SecondPageState extends State<SecondPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Qiblah Page"),
-      ),
       body: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(8.0),

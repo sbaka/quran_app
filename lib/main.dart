@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quran_app/Modals/VerseModal.dart';
 import 'package:quran_app/Pages/home.dart';
 import 'package:provider/provider.dart';
 import 'package:quran_app/Pages/quran_reading_page.dart';
@@ -14,9 +15,11 @@ import 'Providers/QiblahCompass_Provider.dart';
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(LastReadAdapter()); // Register the adapter
+  Hive.registerAdapter(
+      VerseModalAdapter()); // Register your FavoriteVerseAdapter
 
   await Hive.openBox<String>('lastReadBox');
-
+  await Hive.openBox<VerseModal>('favorite_verses');
   runApp(
     MultiProvider(
       providers: [

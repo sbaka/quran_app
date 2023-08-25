@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quran_app/Pages/SearchPage.dart';
-import 'package:quran_app/Pages/first_page.dart';
 import 'package:quran_app/Pages/fourth_page.dart';
-import 'package:quran_app/Pages/second_page.dart';
+import 'package:quran_app/Pages/home_page.dart';
+import 'package:quran_app/Pages/qiblahPage.dart';
 import 'package:quran_app/Pages/third_page.dart';
 
 // to get location of user
@@ -121,8 +121,8 @@ class _HomeState extends State<Home> {
         ],
       ),
       body: [
-        const FirstPage(),
-        const SecondPage(),
+        const HomePage(),
+        const qiblahPage(),
         const ThirdPage(),
         const FourthPage(),
       ][selectedPage],

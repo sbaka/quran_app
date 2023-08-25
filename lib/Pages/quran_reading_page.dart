@@ -5,7 +5,7 @@ import 'package:quran_app/Pages/SearchPage.dart';
 
 import 'package:quran_app/Providers/verses_Provide.dart';
 
-import '../Components/quranReading_Widget.dart';
+import '../Components/quranReading_widget.dart';
 import '../Components/surahReadingInformations_widget.dart';
 import '../Providers/last_Read_Provider.dart';
 

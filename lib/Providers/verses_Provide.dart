@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 import 'package:share_plus/share_plus.dart';
 import 'dart:convert';
 
@@ -108,6 +109,7 @@ class VersesProvider extends ChangeNotifier {
             'data/audio/$index/$audioFile'; // Construct the audio URL
 
         VerseModal verse = VerseModal(
+          id: index + key,
           content: value,
           translationEng: translation,
           audioData: audioUrl, // Add audio data to VerseModal
@@ -120,5 +122,53 @@ class VersesProvider extends ChangeNotifier {
       print('Error: $error');
       return [];
     }
+  }
+
+  Box<VerseModal>? _favoriteVersesBox;
+  bool _isInitialized = false;
+
+  VersesProvider() {
+    openBox();
+  }
+
+  Future<void> openBox() async {
+    _favoriteVersesBox = await Hive.openBox<VerseModal>(
+        'favorite_verses'); // Specify VerseModal type
+    _isInitialized = true;
+    notifyListeners(); // Notify listeners after the box is opened
+  }
+
+  Future<void> storeFavoriteVerse(VerseModal verse) async {
+    if (!_isInitialized) {
+      // Handle the case where box is not initialized
+      return;
+    }
+    // Use a unique identifier (like verse ID) as the key
+    await _favoriteVersesBox!.put(verse.id, verse);
+
+    notifyListeners();
+  }
+
+  VerseModal? getFavoriteVerse(String verseId) {
+    if (!_isInitialized) {
+      // Handle the case where box is not initialized
+      return null;
+    }
+    return _favoriteVersesBox!.get(verseId);
+  }
+
+  bool isVerseFavorite(String verseId) {
+    if (!_isInitialized) {
+      return false; // Handle the case where box is not initialized
+    }
+    return _favoriteVersesBox!.containsKey(verseId);
+  }
+
+  Future<void> removeFavoriteVerse(String verseId) async {
+    if (!_isInitialized) {
+      return; // Handle the case where box is not initialized
+    }
+    await _favoriteVersesBox!.delete(verseId);
+    notifyListeners();
   }
 }

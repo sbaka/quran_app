@@ -112,9 +112,21 @@ class _quranReading_WidgetState extends State<quranReading_Widget> {
                                   ),
                                 ),
                                 IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.bookmark_border_outlined,
+                                  onPressed: () {
+                                    if (versesProvider
+                                        .isVerseFavorite(verse.id)) {
+                                      // Remove the verse from favorites
+                                      versesProvider
+                                          .removeFavoriteVerse(verse.id);
+                                    } else {
+                                      // Add the verse to favorites
+                                      versesProvider.storeFavoriteVerse(verse);
+                                    }
+                                  },
+                                  icon: Icon(
+                                    versesProvider.isVerseFavorite(verse.id)
+                                        ? Icons.bookmark
+                                        : Icons.bookmark_border,
                                     color: Color(0xFFA44AFF),
                                     size: 25,
                                   ),
@@ -195,7 +207,6 @@ class ChromeReaderModeWidget extends StatelessWidget {
     for (var e in digits) {
       arabicNumeric += arabicNumbers[e];
     }
-    print(arabicNumeric);
     return "\u{FD3F} " + '$arabicNumeric' + " \u{FD3E}";
   }
 

@@ -171,4 +171,13 @@ class VersesProvider extends ChangeNotifier {
     await _favoriteVersesBox!.delete(verseId);
     notifyListeners();
   }
+
+  Future<List<VerseModal>> getAllVersesFromBox() async {
+    if (!_isInitialized) {
+      return []; // Handle the case where box is not initialized
+    }
+
+    List<VerseModal> allVerses = _favoriteVersesBox!.values.toList();
+    return allVerses;
+  }
 }

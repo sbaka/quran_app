@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quran_app/Components/QiblahCompass_widget.dart';
+import 'package:quran_app/Pages/SearchPage.dart';
 
 import '../Providers/QiblahCompass_Provider.dart';
 
@@ -23,6 +24,41 @@ class _qiblahPageState extends State<qiblahPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const Drawer(child: Text("")),
+      appBar: AppBar(
+        title: const Text(
+          'Qiblah',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            height: 1.5,
+            color: Color(0xffffffff),
+          ),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        actions: [
+          TextButton(
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: SearchPage(),
+              );
+            },
+            child: const SizedBox(
+              width: 24,
+              height: 24,
+              child: Icon(
+                Icons.search,
+                size: 24,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
       body: Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(8.0),

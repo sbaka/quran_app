@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:quran_app/Components/souratList_widget.dart';
+import 'package:quran_app/Components/favorite_widget.dart';
 import 'package:quran_app/Pages/SearchPage.dart';
 
-import '../Components/lastRead_widget.dart';
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class FavoritePage extends StatefulWidget {
+  const FavoritePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<FavoritePage> createState() => _FavoritePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _FavoritePageState extends State<FavoritePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const Drawer(child: Text("")),
       appBar: AppBar(
         title: const Text(
-          'Quran App',
+          'Bookmarks',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: 'Poppins',
@@ -50,26 +48,9 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: const Column(
-        children: [
-          Expanded(
-            flex: 3,
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
-              child: LastRead(),
-            ),
-          ),
-          Expanded(
-            flex: 6,
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 8.0,
-                horizontal: 16,
-              ),
-              child: SouraWidget(),
-            ),
-          ),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+        child: FavoriteWidget(),
       ),
     );
   }

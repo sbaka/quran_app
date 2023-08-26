@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quran_app/Pages/SearchPage.dart';
-import 'package:quran_app/Pages/fourth_page.dart';
+import 'package:quran_app/Pages/favorite_Page.dart';
 import 'package:quran_app/Pages/home_page.dart';
 import 'package:quran_app/Pages/qiblahPage.dart';
 import 'package:quran_app/Pages/third_page.dart';
@@ -21,41 +21,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const Drawer(child: Text("")),
-      appBar: AppBar(
-        title: const Text(
-          'Quran App',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            height: 1.5,
-            color: Color(0xffffffff),
-          ),
-        ),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        actions: [
-          TextButton(
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: SearchPage(),
-              );
-            },
-            child: const SizedBox(
-              width: 24,
-              height: 24,
-              child: Icon(
-                Icons.search,
-                size: 24,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
       backgroundColor: const Color(0xff030c23),
       bottomNavigationBar: NavigationBar(
         height: 80,
@@ -124,7 +89,7 @@ class _HomeState extends State<Home> {
         const HomePage(),
         const qiblahPage(),
         const ThirdPage(),
-        const FourthPage(),
+        const FavoritePage(),
       ][selectedPage],
     );
   }

@@ -1,10 +1,12 @@
+import 'package:adhan_dart/adhan_dart.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:intl/intl.dart';
 
 import 'package:quran_app/Modals/PrayerTimingsModal.dart';
+
+import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter_timezone/flutter_timezone.dart';
 
 class TimePrayerProvider extends ChangeNotifier {
   PrayerTimingsModal _times = PrayerTimingsModal(
@@ -26,7 +28,7 @@ class TimePrayerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String> fetchUserAddress() async {
+  Future<String> fetchUserCoordinates() async {
     // Request permission to access the user's location
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.deniedForever) {
@@ -49,43 +51,95 @@ class TimePrayerProvider extends ChangeNotifier {
       desiredAccuracy: LocationAccuracy.high,
     );
 
-    // Retrieve the address using the user's coordinates
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-      position.latitude,
-      position.longitude,
-    );
-
-    // Extract the address components from the first placemark
-    Placemark placemark = placemarks.first;
-    String? subThoroughfare = placemark.subThoroughfare;
-    String? thoroughfare = placemark.thoroughfare;
-    String? locality = placemark.locality;
-    String? postalCode = placemark.postalCode;
-    String? country = placemark.country;
-
-    // Build the full address string
-    String fullAddress = '';
-    if (subThoroughfare != null) {
-      fullAddress += '$subThoroughfare ';
-    }
-    if (thoroughfare != null) {
-      fullAddress += '$thoroughfare, ';
-    }
-    if (locality != null) {
-      fullAddress += '$locality, ';
-    }
-    if (postalCode != null) {
-      fullAddress += '$postalCode, ';
-    }
-    if (country != null) {
-      fullAddress += country;
-    }
-
-    // Use the full address for API fetching or further processing
-    print('Full Address: $fullAddress');
-    return fullAddress; // Return the full address
+    // Return the coordinates as a string
+    return '${position.latitude},${position.longitude}';
   }
 
+  Future<PrayerTimingsModal> fetchTodayInfo() async {
+    isLoading = true;
+
+    String fullAddress =
+        await fetchUserCoordinates(); // Retrieve the user's address
+    List<String> addressComponents = fullAddress.split(',');
+
+    double latitude = double.parse(addressComponents[0]);
+    double longitude = double.parse(addressComponents[1]);
+
+    final String currentTimeZone = await FlutterTimezone.getLocalTimezone();
+    final timezone = tz.getLocation(currentTimeZone);
+
+    Coordinates coordinates = Coordinates(latitude, longitude);
+    DateTime date = tz.TZDateTime.from(DateTime.now(), timezone);
+
+    CalculationParameters params = CalculationMethod.MuslimWorldLeague();
+
+    PrayerTimes prayerTimes = PrayerTimes(coordinates, date, params);
+
+    DateTime fajrTime = prayerTimes.fajr!;
+    DateTime dhuhrTime = prayerTimes.dhuhr!;
+    DateTime asrTime = prayerTimes.asr!;
+    DateTime maghribTime = prayerTimes.maghrib!;
+    DateTime ishaTime = prayerTimes.isha!;
+
+    int fajrHour = tz.TZDateTime.from(fajrTime, timezone).hour;
+    int fajrMinute = tz.TZDateTime.from(fajrTime, timezone).minute;
+
+    int dhuhrHour = tz.TZDateTime.from(dhuhrTime, timezone).hour;
+    int dhuhrMinute = tz.TZDateTime.from(dhuhrTime, timezone).minute;
+
+    int asrHour = tz.TZDateTime.from(asrTime, timezone).hour;
+    int asrMinute = tz.TZDateTime.from(asrTime, timezone).minute;
+
+    int maghribHour = tz.TZDateTime.from(maghribTime, timezone).hour;
+    int maghribMinute = tz.TZDateTime.from(maghribTime, timezone).minute;
+
+    int ishaHour = tz.TZDateTime.from(ishaTime, timezone).hour;
+    int ishaMinute = tz.TZDateTime.from(ishaTime, timezone).minute;
+
+    PrayerTimingsModal prayerTimingsModal = PrayerTimingsModal(
+      fajr: '$fajrHour:$fajrMinute',
+      dhuhr: '$dhuhrHour:$dhuhrMinute',
+      asr: '$asrHour:$asrMinute',
+      maghrib: '$maghribHour:$maghribMinute',
+      isha: '$ishaHour:$ishaMinute',
+    );
+
+    isLoading = false;
+    return prayerTimingsModal;
+  }
+
+  String getNextPrayerTime(PrayerTimingsModal timings) {
+    final currentDateTime = DateTime.now();
+    final prayerTimes = [
+      {'name': 'Fajr', 'time': timings.fajr},
+      {'name': 'Dhuhr', 'time': timings.dhuhr},
+      {'name': 'Asr', 'time': timings.asr},
+      {'name': 'Maghrib', 'time': timings.maghrib},
+      {'name': 'Isha', 'time': timings.isha},
+    ];
+
+    for (final prayer in prayerTimes) {
+      final prayerHour = int.parse(prayer['time']!.split(':')[0]);
+      final prayerMinute = int.parse(prayer['time']!.split(':')[1]);
+
+      final prayerDateTime = DateTime(
+        currentDateTime.year,
+        currentDateTime.month,
+        currentDateTime.day,
+        prayerHour,
+        prayerMinute,
+      );
+
+      if (prayerDateTime.isAfter(currentDateTime)) {
+        final formattedPrayerTime = DateFormat('HH:mm').format(prayerDateTime);
+        return '${prayer['name']}: $formattedPrayerTime';
+      }
+    }
+
+    return 'No upcoming prayer';
+  }
+
+  /*
   Future<PrayerTimingsModal> fetchTodayInfo() async {
     isLoading = true;
 
@@ -129,4 +183,5 @@ class TimePrayerProvider extends ChangeNotifier {
 
     throw Exception('Failed to fetch prayer timings');
   }
+*/
 }

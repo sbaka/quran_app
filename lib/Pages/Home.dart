@@ -3,7 +3,7 @@ import 'package:quran_app/Pages/SearchPage.dart';
 import 'package:quran_app/Pages/favorite_Page.dart';
 import 'package:quran_app/Pages/home_page.dart';
 import 'package:quran_app/Pages/qiblahPage.dart';
-import 'package:quran_app/Pages/third_page.dart';
+import 'package:quran_app/Pages/timePrayer_Page.dart';
 
 // to get location of user
 // Modal for prayer Times
@@ -88,7 +88,7 @@ class _HomeState extends State<Home> {
       body: [
         const HomePage(),
         const qiblahPage(),
-        const ThirdPage(),
+        const TimePrayerPage(),
         const FavoritePage(),
       ][selectedPage],
     );

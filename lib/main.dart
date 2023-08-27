@@ -11,6 +11,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'Hive/lastReadAdapter.dart';
 import 'Providers/QiblahCompass_Provider.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
   await Hive.initFlutter();
@@ -20,6 +21,8 @@ void main() async {
 
   await Hive.openBox<String>('lastReadBox');
   await Hive.openBox<VerseModal>('favorite_verses');
+  tz.initializeTimeZones();
+
   runApp(
     MultiProvider(
       providers: [

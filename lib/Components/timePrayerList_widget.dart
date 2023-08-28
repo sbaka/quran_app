@@ -29,6 +29,10 @@ class _TimePrayerListState extends State<TimePrayerList> {
                 'Isha',
               ][index];
 
+              const prayerNames = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
+              final nextPrayerIndex = prayerNames
+                  .indexOf(timePrayerProvider.nextPrayerTime.split(":")[0]);
+
               final prayerImage = [
                 'assets/Images/fajr.png',
                 'assets/Images/dhuhr.png',
@@ -51,24 +55,31 @@ class _TimePrayerListState extends State<TimePrayerList> {
                     padding: const EdgeInsets.symmetric(
                         vertical: 8.0, horizontal: 16),
                     child: ListTile(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                            color: index == nextPrayerIndex
+                                ? Colors.white
+                                : Color.fromARGB(255, 30, 42, 82),
+                            width: 1),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
                       leading: Image.asset(
                         prayerImage,
                         width: 50,
                         height: 50,
                         color: Colors.white, // Customize the color as needed
                       ),
-                      title: Text(
-                        prayerName,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      title: Row(
+                        children: [
+                          Text(
+                            prayerName,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Spacer(),
+                          Text(prayerFormattedTime),
+                        ],
                       ),
-                      subtitle: Text(prayerFormattedTime),
                     ),
-                  ),
-                  Divider(
-                    thickness: 0.8,
-                    indent: 15,
-                    endIndent: 10,
-                    color: const Color(0xff7B80AD).withOpacity(0.35),
                   ),
                 ],
               );

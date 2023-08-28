@@ -8,22 +8,28 @@ import 'package:quran_app/Modals/PrayerTimingsModal.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_timezone/flutter_timezone.dart';
 
+class PrayerInfo {
+  final PrayerTimingsModal prayerTimings;
+  final PrayerTimes prayerTimesInstance;
+
+  PrayerInfo(this.prayerTimings, this.prayerTimesInstance);
+}
+
 class TimePrayerProvider extends ChangeNotifier {
-  PrayerTimingsModal _times = PrayerTimingsModal(
-    fajr: '',
-    dhuhr: '',
-    asr: '',
-    maghrib: '',
-    isha: '',
-  );
+  late PrayerTimingsModal _times;
+  late String _nextPrayerTime;
 
   bool isLoading = false;
 
   PrayerTimingsModal get times => _times;
+  String get nextPrayerTime => _nextPrayerTime;
 
   getMyData() async {
     isLoading = true;
-    _times = await fetchTodayInfo();
+    PrayerInfo prayerInfo = await fetchTodayInfo();
+    _times = prayerInfo.prayerTimings;
+    _nextPrayerTime = getNextPrayerTime(prayerInfo);
+    // Assign the timings from PrayerInfo
     isLoading = false;
     notifyListeners();
   }
@@ -55,7 +61,7 @@ class TimePrayerProvider extends ChangeNotifier {
     return '${position.latitude},${position.longitude}';
   }
 
-  Future<PrayerTimingsModal> fetchTodayInfo() async {
+  Future<PrayerInfo> fetchTodayInfo() async {
     isLoading = true;
 
     String fullAddress =
@@ -105,8 +111,27 @@ class TimePrayerProvider extends ChangeNotifier {
     );
 
     isLoading = false;
-    return prayerTimingsModal;
+    return PrayerInfo(prayerTimingsModal, prayerTimes);
   }
+
+  String getNextPrayerTime(PrayerInfo prayerInfo) {
+    isLoading = true;
+
+    final nextPrayerName = prayerInfo.prayerTimesInstance.nextPrayer();
+    final nextPrayerTime =
+        prayerInfo.prayerTimesInstance.timeForPrayer(nextPrayerName);
+
+    if (nextPrayerTime != null) {
+      final formattedPrayerTime = DateFormat('HH:mm').format(nextPrayerTime);
+      isLoading = false;
+
+      return '$nextPrayerName: $formattedPrayerTime';
+    }
+    isLoading = false;
+
+    return 'No upcoming prayer';
+  }
+  /*
 
   String getNextPrayerTime(PrayerTimingsModal timings) {
     final currentDateTime = DateTime.now();
@@ -120,6 +145,7 @@ class TimePrayerProvider extends ChangeNotifier {
 
     for (final prayer in prayerTimes) {
       final prayerHour = int.parse(prayer['time']!.split(':')[0]);
+
       final prayerMinute = int.parse(prayer['time']!.split(':')[1]);
 
       final prayerDateTime = DateTime(
@@ -138,7 +164,7 @@ class TimePrayerProvider extends ChangeNotifier {
 
     return 'No upcoming prayer';
   }
-
+*/
   /*
   Future<PrayerTimingsModal> fetchTodayInfo() async {
     isLoading = true;

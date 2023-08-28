@@ -29,11 +29,11 @@ class _TimePrayerWidgetState extends State<TimePrayerWidget> {
   @override
   Widget build(BuildContext context) {
     Map<String, String> prayerImageMap = {
-      'Fajr': 'assets/Images/fajr.png',
-      'Dhuhr': 'assets/Images/dhuhr.png',
-      'Asr': 'assets/Images/asr.png',
-      'Maghrib': 'assets/Images/maghreb.png',
-      'Isha': 'assets/Images/isha.png',
+      'fajr': 'assets/Images/fajr.png',
+      'dhuhr': 'assets/Images/dhuhr.png',
+      'asr': 'assets/Images/asr.png',
+      'maghrib': 'assets/Images/maghreb.png',
+      'isha': 'assets/Images/isha.png',
     };
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
@@ -97,11 +97,11 @@ class _TimePrayerWidgetState extends State<TimePrayerWidget> {
                 builder: (context, dataProvider, _) {
                   if (dataProvider.isLoading) {
                     return const CircularProgressIndicator();
-                  } else if (dataProvider.times != null) {
-                    final nextPrayerTime =
-                        dataProvider.getNextPrayerTime(dataProvider.times);
-                    final imagePath =
-                        prayerImageMap[nextPrayerTime.split(":")[0]];
+                  } else if (dataProvider.nextPrayerTime != null) {
+                    final nextPrayerTime = dataProvider.nextPrayerTime;
+                    final nextPrayerName =
+                        nextPrayerTime.split(":")[0]; // Extract prayer name
+                    final imagePath = prayerImageMap[nextPrayerName];
 
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

@@ -57,22 +57,26 @@ class _TimePrayerWidgetState extends State<TimePrayerWidget> {
         height: 280,
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "${_today.toFormat("dd MMMM yyyy").toString()}'",
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
+            Consumer<TimePrayerProvider>(
+              builder: (context, timePrayerProvider, _) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "${timePrayerProvider.today.toFormat("dd MMMM yyyy")}",
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ],
+                  ],
+                );
+              },
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -99,6 +103,8 @@ class _TimePrayerWidgetState extends State<TimePrayerWidget> {
                     return const CircularProgressIndicator();
                   } else if (dataProvider.nextPrayerTime != null) {
                     final nextPrayerTime = dataProvider.nextPrayerTime;
+
+                    //print(nextPrayerTime);
                     final nextPrayerName =
                         nextPrayerTime.split(":")[0]; // Extract prayer name
                     final imagePath = prayerImageMap[nextPrayerName];

@@ -1,35 +1,59 @@
 import 'package:adhan_dart/adhan_dart.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:hijri/hijri_calendar.dart';
 import 'package:intl/intl.dart';
 
 import 'package:quran_app/Modals/PrayerTimingsModal.dart';
 
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:timezone/timezone.dart';
 
 class PrayerInfo {
   final PrayerTimingsModal prayerTimings;
   final PrayerTimes prayerTimesInstance;
+  final Location timeZone;
 
-  PrayerInfo(this.prayerTimings, this.prayerTimesInstance);
+  PrayerInfo(this.prayerTimings, this.prayerTimesInstance, this.timeZone);
 }
 
 class TimePrayerProvider extends ChangeNotifier {
-  late PrayerTimingsModal _times;
-  late String _nextPrayerTime;
+  PrayerTimingsModal _times =
+      PrayerTimingsModal(fajr: "", dhuhr: "", asr: "", maghrib: "", isha: "");
+  String _nextPrayerTime = "";
+  HijriCalendar _today = HijriCalendar.now();
 
   bool isLoading = false;
 
   PrayerTimingsModal get times => _times;
   String get nextPrayerTime => _nextPrayerTime;
+  HijriCalendar get today => _today;
 
   getMyData() async {
     isLoading = true;
-    PrayerInfo prayerInfo = await fetchTodayInfo();
+
+    PrayerInfo prayerInfo = await fetchTodayInfo(DateTime.now());
     _times = prayerInfo.prayerTimings;
     _nextPrayerTime = getNextPrayerTime(prayerInfo);
-    // Assign the timings from PrayerInfo
+    _today = HijriCalendar.now();
+
+    // Check if there's no upcoming prayer for the current day
+    if (_nextPrayerTime.contains("fajrafter")) {
+      isLoading = true;
+
+      final tomorrow = DateTime.now().add(Duration(days: 1));
+
+      PrayerInfo tomorrowprayerInfo = await fetchTodayInfo(tomorrow);
+      _today = HijriCalendar.fromDate(tomorrow);
+
+      _times = tomorrowprayerInfo.prayerTimings;
+      _nextPrayerTime = getNextPrayerTime(tomorrowprayerInfo);
+
+      isLoading = false;
+      notifyListeners();
+    }
+
     isLoading = false;
     notifyListeners();
   }
@@ -61,7 +85,7 @@ class TimePrayerProvider extends ChangeNotifier {
     return '${position.latitude},${position.longitude}';
   }
 
-  Future<PrayerInfo> fetchTodayInfo() async {
+  Future<PrayerInfo> fetchTodayInfo(DateTime date) async {
     isLoading = true;
 
     String fullAddress =
@@ -75,11 +99,11 @@ class TimePrayerProvider extends ChangeNotifier {
     final timezone = tz.getLocation(currentTimeZone);
 
     Coordinates coordinates = Coordinates(latitude, longitude);
-    DateTime date = tz.TZDateTime.from(DateTime.now(), timezone);
+    DateTime formatedDate = tz.TZDateTime.from(date, timezone);
 
     CalculationParameters params = CalculationMethod.MuslimWorldLeague();
 
-    PrayerTimes prayerTimes = PrayerTimes(coordinates, date, params);
+    PrayerTimes prayerTimes = PrayerTimes(coordinates, formatedDate, params);
 
     DateTime fajrTime = prayerTimes.fajr!;
     DateTime dhuhrTime = prayerTimes.dhuhr!;
@@ -87,127 +111,31 @@ class TimePrayerProvider extends ChangeNotifier {
     DateTime maghribTime = prayerTimes.maghrib!;
     DateTime ishaTime = prayerTimes.isha!;
 
-    int fajrHour = tz.TZDateTime.from(fajrTime, timezone).hour;
-    int fajrMinute = tz.TZDateTime.from(fajrTime, timezone).minute;
-
-    int dhuhrHour = tz.TZDateTime.from(dhuhrTime, timezone).hour;
-    int dhuhrMinute = tz.TZDateTime.from(dhuhrTime, timezone).minute;
-
-    int asrHour = tz.TZDateTime.from(asrTime, timezone).hour;
-    int asrMinute = tz.TZDateTime.from(asrTime, timezone).minute;
-
-    int maghribHour = tz.TZDateTime.from(maghribTime, timezone).hour;
-    int maghribMinute = tz.TZDateTime.from(maghribTime, timezone).minute;
-
-    int ishaHour = tz.TZDateTime.from(ishaTime, timezone).hour;
-    int ishaMinute = tz.TZDateTime.from(ishaTime, timezone).minute;
-
     PrayerTimingsModal prayerTimingsModal = PrayerTimingsModal(
-      fajr: '$fajrHour:$fajrMinute',
-      dhuhr: '$dhuhrHour:$dhuhrMinute',
-      asr: '$asrHour:$asrMinute',
-      maghrib: '$maghribHour:$maghribMinute',
-      isha: '$ishaHour:$ishaMinute',
+      fajr: DateFormat('HH:mm').format(tz.TZDateTime.from(fajrTime, timezone)),
+      dhuhr:
+          DateFormat('HH:mm').format(tz.TZDateTime.from(dhuhrTime, timezone)),
+      asr: DateFormat('HH:mm').format(tz.TZDateTime.from(asrTime, timezone)),
+      maghrib:
+          DateFormat('HH:mm').format(tz.TZDateTime.from(maghribTime, timezone)),
+      isha: DateFormat('HH:mm').format(tz.TZDateTime.from(ishaTime, timezone)),
     );
-
     isLoading = false;
-    return PrayerInfo(prayerTimingsModal, prayerTimes);
+    return PrayerInfo(prayerTimingsModal, prayerTimes, timezone);
   }
 
   String getNextPrayerTime(PrayerInfo prayerInfo) {
-    isLoading = true;
-
     final nextPrayerName = prayerInfo.prayerTimesInstance.nextPrayer();
     final nextPrayerTime =
         prayerInfo.prayerTimesInstance.timeForPrayer(nextPrayerName);
-
+    final timezone = tz.getLocation(prayerInfo.timeZone.toString());
     if (nextPrayerTime != null) {
-      final formattedPrayerTime = DateFormat('HH:mm').format(nextPrayerTime);
-      isLoading = false;
-
-      return '$nextPrayerName: $formattedPrayerTime';
-    }
-    isLoading = false;
-
-    return 'No upcoming prayer';
-  }
-  /*
-
-  String getNextPrayerTime(PrayerTimingsModal timings) {
-    final currentDateTime = DateTime.now();
-    final prayerTimes = [
-      {'name': 'Fajr', 'time': timings.fajr},
-      {'name': 'Dhuhr', 'time': timings.dhuhr},
-      {'name': 'Asr', 'time': timings.asr},
-      {'name': 'Maghrib', 'time': timings.maghrib},
-      {'name': 'Isha', 'time': timings.isha},
-    ];
-
-    for (final prayer in prayerTimes) {
-      final prayerHour = int.parse(prayer['time']!.split(':')[0]);
-
-      final prayerMinute = int.parse(prayer['time']!.split(':')[1]);
-
-      final prayerDateTime = DateTime(
-        currentDateTime.year,
-        currentDateTime.month,
-        currentDateTime.day,
-        prayerHour,
-        prayerMinute,
-      );
-
-      if (prayerDateTime.isAfter(currentDateTime)) {
-        final formattedPrayerTime = DateFormat('HH:mm').format(prayerDateTime);
-        return '${prayer['name']}: $formattedPrayerTime';
-      }
+      final formattedPrayerTime = tz.TZDateTime.from(nextPrayerTime, timezone);
+      final formattedTimeString =
+          DateFormat('HH:mm').format(formattedPrayerTime);
+      return '$nextPrayerName: $formattedTimeString';
     }
 
     return 'No upcoming prayer';
   }
-*/
-  /*
-  Future<PrayerTimingsModal> fetchTodayInfo() async {
-    isLoading = true;
-
-    String fullAddress =
-        await fetchUserAddress(); // Retrieve the user's address
-
-    final apiURL =
-        'http://api.aladhan.com/v1/timingsByAddress?address=$fullAddress&method=2';
-    print(apiURL);
-
-    final response = await http.get(Uri.parse(apiURL));
-    if (response.statusCode == 200) {
-      final jsonResponse = json.decode(response.body);
-
-      if (jsonResponse.containsKey('data')) {
-        final data = jsonResponse['data'];
-
-        if (data.containsKey('timings')) {
-          final timings = data['timings'];
-
-          // Access individual timings
-          String fajr = timings['Fajr'];
-          String dhuhr = timings['Dhuhr'];
-          String asr = timings['Asr'];
-          String maghrib = timings['Maghrib'];
-          String isha = timings['Isha'];
-
-          // Create PrayerTimingsModal instance
-          PrayerTimingsModal prayerTimingsModal = PrayerTimingsModal(
-            fajr: fajr,
-            dhuhr: dhuhr,
-            asr: asr,
-            maghrib: maghrib,
-            isha: isha,
-          );
-
-          return prayerTimingsModal;
-        }
-      }
-    }
-
-    throw Exception('Failed to fetch prayer timings');
-  }
-*/
 }
